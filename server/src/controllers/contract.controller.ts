@@ -156,3 +156,27 @@ export const getContractByID = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to get contract" });
   }
 };
+
+export const deleteContractByID = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!isValidMongoId(id as string)) {
+    return res.status(400).json({ error: "Invalid contract ID" });
+  }
+
+  try {
+    //deleting the contract code below
+    const deletedContract = await ContractAnalysisSchema.deleteOne({
+      _id: id,
+    });
+
+    if (deletedContract.deletedCount === 0) {
+      return res.status(404).json({ error: "Contract not found" });
+    }
+
+    res.status(200).json({ message: "Contract deleted successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to get contract" });
+  }
+};

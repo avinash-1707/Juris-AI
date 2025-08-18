@@ -45,6 +45,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export default function UserContracts() {
   const { data: contracts } = useQuery<ContractAnalysis[]>({
@@ -54,6 +55,13 @@ export default function UserContracts() {
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  const handleDelete = async (contractId: string) => {
+    const res = await api.delete(`/contracts/contract/${contractId}`);
+    toast(res.data.message, {
+      description: "Refresh to view updated contracts",
+    });
+  };
 
   const contractTypeColors: { [key: string]: string } = {
     Employment: "bg-blue-100 text-blue-800 hover:bg-blue-200",
@@ -144,7 +152,11 @@ export default function UserContracts() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <AlertDialogAction
+                      onClick={() => handleDelete(contract._id)}
+                    >
+                      Continue
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

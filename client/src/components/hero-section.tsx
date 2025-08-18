@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { Button, buttonVariants } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { useRouter } from "next/navigation";
 
 const features = [
   {
@@ -49,6 +50,7 @@ const features = [
 ];
 
 export function HeroSection() {
+  const router = useRouter();
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-background/80">
       <div className="container px-4 md:px-6 flex flex-col items-center max-w-6xl mx-auto">
@@ -76,6 +78,7 @@ export function HeroSection() {
             <Button
               className="inline-flex items-center justify-center text-lg"
               size={"lg"}
+              onClick={() => router.push("/dashboard")}
             >
               Get Started
               <ArrowRight className="ml-2 size-5" />
