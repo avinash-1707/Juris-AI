@@ -75,13 +75,8 @@ export const analyzeContract = async (req: Request, res: Response) => {
     await redis.expire(fileKey, 3600); // 1 hour
 
     const pdfText = await extractTextFromPDF(fileKey);
-    let analysis;
 
-    if (user.isPremium) {
-      analysis = await analyzeContractWithAI(pdfText, "premium", contractType);
-    } else {
-      analysis = await analyzeContractWithAI(pdfText, "free", contractType);
-    }
+    const analysis = await analyzeContractWithAI(pdfText, contractType);
 
     if (!analysis.summary || !analysis.risks || !analysis.opportunities) {
       throw new Error("Failed to analyze contract");

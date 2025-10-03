@@ -13,20 +13,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Accordion, AccordionItem, AccordionTrigger } from "../ui/accordion";
-import { AccordionContent } from "@radix-ui/react-accordion";
 
 interface IContractAnalysisResultsProps {
   analysisResults: ContractAnalysis;
-  isActive: boolean;
   contractId: string;
-  onUpgrade: () => void;
 }
 
 export default function ContractAnalysisResults({
   analysisResults,
-  isActive,
-  onUpgrade,
 }: IContractAnalysisResultsProps) {
   const [activeTab, setActiveTab] = useState("summary");
 
@@ -77,7 +71,7 @@ export default function ContractAnalysisResults({
     }>,
     type: "risks" | "opportunities"
   ) => {
-    const displayItems = isActive ? items : items.slice(0, 3);
+    const displayItems = items;
     const fakeItems = {
       risk: type === "risks" ? "Hidden Risk" : undefined,
       opportunity: type === "opportunities" ? "Hidden Opportunity" : undefined,
@@ -117,7 +111,7 @@ export default function ContractAnalysisResults({
             </p>
           </motion.li>
         ))}
-        {!isActive && items.length > 3 && (
+        {/* {items.length > 3 && (
           <motion.li
             className="border rounded-lg p-4 blur-sm"
             initial={{ opacity: 0, y: 20 }}
@@ -133,25 +127,8 @@ export default function ContractAnalysisResults({
               </Badge>
             </div>
           </motion.li>
-        )}
+        )} */}
       </ul>
-    );
-  };
-
-  const renderPremiumAccordition = (content: ReactNode) => {
-    if (isActive) {
-      return content;
-    }
-
-    return (
-      <div className="relative">
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Button onClick={onUpgrade} variant={"outline"}>
-            Upgrade to Premium
-          </Button>
-        </div>
-        <div className="opacity-50">{content}</div>
-      </div>
     );
   };
 
@@ -234,11 +211,6 @@ export default function ContractAnalysisResults({
             </CardHeader>
             <CardContent>
               {renderRisksAndOpportunities(analysisResults.risks, "risks")}
-              {!isActive && (
-                <p className="mt-4 text-center text-sm text-gray-500">
-                  Upgrade to Premium to see all risks
-                </p>
-              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -252,99 +224,44 @@ export default function ContractAnalysisResults({
                 analysisResults.opportunities,
                 "opportunities"
               )}
-              {!isActive && (
-                <p className="mt-4 text-center text-sm text-gray-500">
-                  Upgrade to Premium to see all opportunities
-                </p>
-              )}
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="details">
-          {isActive ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Contract Details</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {analysisResults.keyClauses?.map((keyClause, index) => (
-                      <motion.li key={index} className="flex items-center">
-                        {keyClause}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recommdations</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {analysisResults.recommendations?.map(
-                      (recommendation, index) => (
-                        <motion.li key={index} className="flex items-center">
-                          {recommendation}
-                        </motion.li>
-                      )
-                    )}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          ) : (
+          <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle>Contract Details</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>
-                  Upgrade to Premium to see contract detailed analysis,
-                  including key clauses and recommendations.
-                </p>
-                <Button
-                  variant={"outline"}
-                  onClick={onUpgrade}
-                  className="mt-4"
-                >
-                  Upgrade to Premium
-                </Button>
+                <ul className="space-y-2">
+                  {analysisResults.keyClauses?.map((keyClause, index) => (
+                    <motion.li key={index} className="flex items-center">
+                      {keyClause}
+                    </motion.li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
-          )}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recommdations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {analysisResults.recommendations?.map(
+                    (recommendation, index) => (
+                      <motion.li key={index} className="flex items-center">
+                        {recommendation}
+                      </motion.li>
+                    )
+                  )}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
-
-      <Accordion type="single" collapsible className="mb-6">
-        {renderPremiumAccordition(
-          <>
-            <AccordionItem value="contract-details">
-              <AccordionTrigger>Contract Details</AccordionTrigger>
-              <AccordionContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <h3 className="font-semibold mb-2">
-                      Duration and Termination
-                    </h3>
-                    <p>{analysisResults.contractDuration}</p>
-                    <strong>Termination Conditions</strong>
-                    <p>{analysisResults.terminationConditions}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Legal Informatiob</h3>
-                    <p>
-                      <strong>Legal Compliance</strong>
-                      {analysisResults.legalCompliance}
-                    </p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </>
-        )}
-      </Accordion>
 
       <Card>
         <CardHeader>
