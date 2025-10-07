@@ -20,6 +20,16 @@ router.get(
   }
 );
 
+router.get("/test-session", (req, res) => {
+  res.json({
+    sessionID: req.sessionID,
+    session: req.session,
+    user: req.user,
+    isAuthenticated: req.isAuthenticated(),
+    cookies: req.headers.cookie,
+  });
+});
+
 router.get("/current-user", (req, res) => {
   if (req.isAuthenticated()) {
     res.json(req.user);
