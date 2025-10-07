@@ -50,10 +50,6 @@ export default function ContractResults({ contractId }: IContractResultsProps) {
     <ContractAnalysisResults
       contractId={contractId}
       analysisResults={analysisResults}
-      isActive={true}
-      onUpgrade={function (): void {
-        throw new Error("Function not implemented.");
-      }}
     />
   );
 }
