@@ -10,9 +10,8 @@ import {
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import OverallScoreChart from "./chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 
 interface IContractAnalysisResultsProps {
   analysisResults: ContractAnalysis;
@@ -111,23 +110,6 @@ export default function ContractAnalysisResults({
             </p>
           </motion.li>
         ))}
-        {/* {items.length > 3 && (
-          <motion.li
-            className="border rounded-lg p-4 blur-sm"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: displayItems.length * 0.1 }}
-          >
-            <div className="flex justify-between items-start mb-2">
-              <span className="font-semibold text-lg">
-                {type === "risks" ? fakeItems.risk : fakeItems.opportunity}
-              </span>
-              <Badge>
-                {(fakeItems.severity || fakeItems.impact)?.toUpperCase()}
-              </Badge>
-            </div>
-          </motion.li>
-        )} */}
       </ul>
     );
   };
